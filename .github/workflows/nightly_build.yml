@@ -59,12 +59,12 @@ jobs:
 
       - name: Handle dependencies
         if: steps.check_commits.outputs.has_new_commits == 'true'
-        run: dotnet restore --force
+        run: dotnet restore RSBot.sln
 
       - name: Create the app package
         if: steps.check_commits.outputs.has_new_commits == 'true'
         run: |
-          msbuild /p:Configuration=Release /p:Platform="x86"
+          dotnet msbuild RSBot.sln /p:Configuration=Release /p:Platform="x86"
           Copy-Item -Path "Dependencies\*" -Destination "Build\Data" -Recurse
           cd Build
           Compress-Archive -Path ".\*" -DestinationPath ".\..\RSBot.${{ env.date }}.zip"
