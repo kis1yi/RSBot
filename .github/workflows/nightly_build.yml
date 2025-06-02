@@ -51,7 +51,7 @@ jobs:
         if: steps.check_commits.outputs.has_new_commits == 'true'
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.313
+          dotnet-version: 8.0.x
 
       - name: Setup MSBuild.exe
         if: steps.check_commits.outputs.has_new_commits == 'true'
@@ -59,7 +59,7 @@ jobs:
 
       - name: Handle dependencies
         if: steps.check_commits.outputs.has_new_commits == 'true'
-        run: dotnet restore RSBot.sln
+        run: dotnet restore
 
       - name: Create the app package
         if: steps.check_commits.outputs.has_new_commits == 'true'
