@@ -59,7 +59,7 @@ jobs:
 
       - name: Handle dependencies
         if: steps.check_commits.outputs.has_new_commits == 'true'
-        run: dotnet restore
+        run: dotnet restore --force
 
       - name: Create the app package
         if: steps.check_commits.outputs.has_new_commits == 'true'
