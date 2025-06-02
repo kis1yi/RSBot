@@ -51,7 +51,7 @@ jobs:
         if: steps.check_commits.outputs.has_new_commits == 'true'
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 8.0.15
 
       - name: Setup MSBuild.exe
         if: steps.check_commits.outputs.has_new_commits == 'true'
