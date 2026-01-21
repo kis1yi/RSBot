@@ -5,6 +5,7 @@ using RSBot.Core.Extensions;
 using RSBot.Core.Objects;
 using RSBot.Core.Objects.Skill;
 using RSBot.Core.Objects.Spawn;
+using RSBot.Core.Objects.Party;
 using RSBot.General.Components;
 using RSBot.Python.Components.API.Interface;
 using RSBot.Python.Views;
@@ -59,6 +60,59 @@ namespace RSBot.Python.Components.API.Core.Entity
 
             return list;
         }
+        private PyList BuildPartyList()
+        {
+            var list = new PyList();
+            List<PartyMember> partyMembers = Game.Party.Members;
+
+            foreach (var entry in partyMembers)
+            {
+                if (entry == null)
+                    continue;
+                var pyItem = new PyDict();
+                pyItem.SetItem(new PyString("uid"), new PyInt(entry.MemberId));
+                pyItem.SetItem(new PyString("player_id"), new PyInt(entry.Player?.UniqueId ?? 0));
+                pyItem.SetItem(new PyString("name"), new PyString(entry.Name));
+                pyItem.SetItem(new PyString("level"), new PyInt(entry.Level));
+                pyItem.SetItem(new PyString("guild"), new PyString(entry.Guild));
+                pyItem.SetItem(new PyString("mastery1_id"), new PyInt(entry.MasteryId1));
+                pyItem.SetItem(new PyString("mastery2_id"), new PyInt(entry.MasteryId2));
+                var hpmp = entry.HealthMana.ToString("X2");
+                int hpPer = Convert.ToByte(hpmp[0].ToString(), 16) * 10;
+                int mpPer = Convert.ToByte(hpmp[1].ToString(), 16) * 10;
+                pyItem.SetItem(new PyString("hp_percentage"), new PyInt(hpPer));
+                pyItem.SetItem(new PyString("mp_percentage"), new PyInt(mpPer));
+                pyItem.SetItem(new PyString("x"), new PyString(entry.Player?.Position.X.ToString() ?? ""));
+                pyItem.SetItem(new PyString("y"), new PyString(entry.Player?.Position.Y.ToString() ?? ""));
+                pyItem.SetItem(new PyString("z"), new PyString(entry.Player?.Position.ZOffset.ToString() ?? ""));
+                pyItem.SetItem(new PyString("region"), new PyString(entry.Player?.Position.Region.ToString() ?? ""));
+                pyItem.SetItem(new PyString("region_name"), new PyString(Game.ReferenceManager.GetTranslation(entry.Player?.Position.Region.ToString() ?? "")));
+                pyItem.SetItem(new PyString("distance"), new PyString(entry.Player?.DistanceToPlayer.ToString() ?? ""));
+                list.Append(pyItem);
+            }
+            return list;
+        }
+        private PyList BuildPlayersList(IEnumerable<SpawnedPlayer> player)
+        {
+            var list = new PyList();
+            foreach (var entry in player)
+            {
+                if (entry == null)
+                    continue;
+                var pyItem = new PyDict();
+                pyItem.SetItem(new PyString("uid"), new PyInt(entry.UniqueId));
+                pyItem.SetItem(new PyString("name"), new PyString(entry.Name));
+                pyItem.SetItem(new PyString("guild"), new PyString(entry.Guild.Name));
+                pyItem.SetItem(new PyString("x"), new PyString(entry.Position.X.ToString()));
+                pyItem.SetItem(new PyString("y"), new PyString(entry.Position.Y.ToString()));
+                pyItem.SetItem(new PyString("z"), new PyString(entry.Position.ZOffset.ToString()));
+                pyItem.SetItem(new PyString("region"), new PyString(entry.Position.Region.ToString()));
+                pyItem.SetItem(new PyString("region_name"), new PyString(Game.ReferenceManager.GetTranslation(entry.Position.Region.ToString())));
+                pyItem.SetItem(new PyString("distance"), new PyString(entry.DistanceToPlayer.ToString()));
+                list.Append(pyItem);
+            }
+            return list;
+        }
         private PyList BuildNPCList(IEnumerable<SpawnedNpc> npc)
         {
             var list = new PyList();
@@ -97,6 +151,38 @@ namespace RSBot.Python.Components.API.Core.Entity
                 {
 
                     result = BuildMonsterList(monsters);
+                }
+                return result;
+            }
+        }
+        private PyList GetPartyMembers()
+        {
+            using (Py.GIL())
+            {
+                var result = new PyList();
+                if (Game.Player == null)
+                {
+                    return result;
+                }
+                if (Game.Party.IsInParty)
+                {
+                    result = BuildPartyList();
+                }
+                return result;
+            }
+        }
+        private PyList GetSpawnedPlayers()
+        {
+            using (Py.GIL())
+            {
+                var result = new PyList();
+                if (Game.Player == null)
+                {
+                    return result;
+                }
+                if (SpawnManager.TryGetEntities<SpawnedPlayer>(out var players))
+                {
+                    result = BuildPlayersList(players);
                 }
                 return result;
             }
@@ -247,6 +333,14 @@ namespace RSBot.Python.Components.API.Core.Entity
         public PyList get_monsters()
         {
             return GetMonsters();
+        }
+        public PyList get_party()
+        {
+            return GetPartyMembers();
+        }
+        public PyList get_players()
+        {
+            return GetSpawnedPlayers();
         }
         public PyList get_npcs()
         {

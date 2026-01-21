@@ -146,6 +146,10 @@ public partial class Main : DoubleBufferedControl
         string data_hex = BitConverter.ToString(data).Replace("-", " ");
         _pyPlugins.CallPluginEvent("on_packet_from_server", AppendLog, opcode,data_hex);
     }
+    private void timerEventLoop_Tick(object sender, EventArgs e)
+    {
+        _pyPlugins.CallPluginEvent("event_loop", AppendLog);
+    }
     #endregion
     private void btnOpenFolder_Click(object sender, EventArgs e)
     {

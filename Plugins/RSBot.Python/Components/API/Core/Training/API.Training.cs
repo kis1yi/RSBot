@@ -131,6 +131,21 @@ namespace RSBot.Python.Components.API.Core.Training
                 return result;
             }
         }
+        private void MoveToCoordinates(float x, float y, ushort region)
+        {
+            if (Game.Player != null)
+            {
+                try
+                {
+                    Position pos = new(x, y, region);
+                    Game.Player.MoveTo(pos);
+                }
+                catch (Exception e)
+                {
+                    Log.Debug($"[Python-API] An error occurred while trying to move to coordinates: {e}");
+                }
+            }
+        }
         private bool GetTrainingScript(string path)
         {
             return false;
@@ -158,6 +173,10 @@ namespace RSBot.Python.Components.API.Core.Training
         public PyDict get_training_script()
         {
             return new PyDict();
+        }
+        public void move_to(float x, float y, ushort region)
+        {
+            MoveToCoordinates(x, y, region);
         }
     }
 }

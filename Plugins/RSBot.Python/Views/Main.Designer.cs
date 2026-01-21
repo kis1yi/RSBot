@@ -29,6 +29,7 @@ partial class Main
     /// </summary>
     private void InitializeComponent()
     {
+        components = new System.ComponentModel.Container();
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         mainPanel = new SDUI.Controls.Panel();
         flowLayoutPanel1 = new SDUI.Controls.FlowLayoutPanel();
@@ -44,6 +45,7 @@ partial class Main
         ColAuthor = new DataGridViewTextBoxColumn();
         ColVersion = new DataGridViewTextBoxColumn();
         FileName = new DataGridViewTextBoxColumn();
+        timerOnCall = new System.Windows.Forms.Timer(components);
         mainPanel.SuspendLayout();
         flowLayoutPanel1.SuspendLayout();
         tcPlugin.SuspendLayout();
@@ -222,6 +224,12 @@ partial class Main
         FileName.ReadOnly = true;
         FileName.Visible = false;
         // 
+        // timerOnCall
+        // 
+        timerOnCall.Enabled = true;
+        timerOnCall.Interval = 500;
+        timerOnCall.Tick += timerEventLoop_Tick;
+        // 
         // Main
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
@@ -254,4 +262,5 @@ partial class Main
     private DataGridViewTextBoxColumn ColAuthor;
     private DataGridViewTextBoxColumn ColVersion;
     private DataGridViewTextBoxColumn FileName;
+    private System.Windows.Forms.Timer timerOnCall;
 }
