@@ -138,7 +138,7 @@ namespace RSBot.Python.Components.API.Core.Training
                 try
                 {
                     Position pos = new(x, y, region);
-                    Game.Player.MoveTo(pos);
+                    Game.Player.MoveTo(pos,false);
                 }
                 catch (Exception e)
                 {

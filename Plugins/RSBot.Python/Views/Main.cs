@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace RSBot.Python.Views;
 
@@ -35,6 +36,8 @@ public partial class Main : DoubleBufferedControl
         EventManager.SubscribeEvent("OnTeleportStart", OnTeleportStart);
         EventManager.SubscribeEvent("OnClientPacketReceive", OnClientPacketReceive);
         EventManager.SubscribeEvent("OnServerPacketReceive", OnServerPacketReceive);
+        EventManager.SubscribeEvent("OnEnterGame", OnEnterGame);
+        EventManager.SubscribeEvent("OnAgentServerDisconnected", OnAgentServerDisconnected);
     }
     private void WireEvents()
     {
@@ -146,9 +149,24 @@ public partial class Main : DoubleBufferedControl
         string data_hex = BitConverter.ToString(data).Replace("-", " ");
         _pyPlugins.CallPluginEvent("on_packet_from_server", AppendLog, opcode,data_hex);
     }
-    private void timerEventLoop_Tick(object sender, EventArgs e)
+    private void OnEnterGame()
     {
-        _pyPlugins.CallPluginEvent("event_loop", AppendLog);
+        _pyPlugins.CallPluginEvent("on_enter_game", AppendLog);
+    }
+    private void OnAgentServerDisconnected()
+    {
+        _pyPlugins.CallPluginEvent("on_disconnect", AppendLog);
+    }
+    private async void timerEventLoop_Tick(object sender, EventArgs e)
+    {
+        try
+        {
+            await Task.Run(() => _pyPlugins.CallPluginEvent("event_loop", AppendLog));
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"[Python-API] event_loop exception: {ex}");
+        }
     }
     #endregion
     private void btnOpenFolder_Click(object sender, EventArgs e)
