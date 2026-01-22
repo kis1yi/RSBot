@@ -41,6 +41,7 @@ namespace RSBot.Python.Components.API.Core.Inventory
                 pyItem.SetItem(new PyString("model"), new PyInt(item.ItemId));
                 pyItem.SetItem(new PyString("servername"), new PyString(item.Record.CodeName));
                 pyItem.SetItem(new PyString("name"), new PyString(item.Record.GetRealName()));
+                pyItem.SetItem(new PyString("tid"), new PyInt(item.Record.Tid));
                 pyItem.SetItem(new PyString("quantity"), new PyInt(item.Amount));
                 pyItem.SetItem(new PyString("plus"), new PyInt(item.OptLevel));
                 pyItem.SetItem(new PyString("rarity"), new PyString(item.Record.GetRarityName()));
