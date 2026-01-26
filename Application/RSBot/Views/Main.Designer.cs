@@ -70,6 +70,7 @@ namespace RSBot.Views
             coloredToolStripMenuItem = new ToolStripMenuItem();
             topCharacter = new Character();
             windowPageControl = new SDUI.Controls.WindowPageControl();
+            pyPluginsToolStripMenuItem = new ToolStripMenuItem();
             stripStatus.SuspendLayout();
             bottomPanel.SuspendLayout();
             pSidebar.SuspendLayout();
@@ -296,7 +297,7 @@ namespace RSBot.Views
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuSelectProfile, networkConfigToolStripMenuItem, menuItemExit });
             fileToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            fileToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             fileToolStripMenuItem.Text = "File";
             // 
             // menuSelectProfile
@@ -325,16 +326,17 @@ namespace RSBot.Views
             // 
             // viewToolStripMenuItem
             // 
-            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuSidebar });
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuSidebar, pyPluginsToolStripMenuItem });
             viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            viewToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             viewToolStripMenuItem.Text = "View";
             // 
             // menuSidebar
             // 
+            menuSidebar.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             menuSidebar.Name = "menuSidebar";
-            menuSidebar.Size = new System.Drawing.Size(147, 26);
+            menuSidebar.Size = new System.Drawing.Size(224, 26);
             menuSidebar.Text = "Sidebar";
             menuSidebar.Click += menuSidebar_Click;
             // 
@@ -343,7 +345,7 @@ namespace RSBot.Views
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuScriptRecorder });
             toolsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            toolsToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // menuScriptRecorder
@@ -358,7 +360,7 @@ namespace RSBot.Views
             // 
             menuPlugins.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             menuPlugins.Name = "menuPlugins";
-            menuPlugins.Size = new System.Drawing.Size(148, 26);
+            menuPlugins.Size = new System.Drawing.Size(210, 26);
             menuPlugins.Text = "Plugins";
             // 
             // aboutToolStripMenuItem
@@ -366,7 +368,7 @@ namespace RSBot.Views
             aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { thisToolStripMenuItem });
             aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            aboutToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             aboutToolStripMenuItem.Text = "About";
             // 
             // thisToolStripMenuItem
@@ -384,20 +386,20 @@ namespace RSBot.Views
             menuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, viewToolStripMenuItem, toolsToolStripMenuItem, menuPlugins, botsToolStripMenuItem, languageToolStripMenuItem, themeToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip.Name = "menuStrip";
-            menuStrip.Size = new System.Drawing.Size(149, 212);
+            menuStrip.Size = new System.Drawing.Size(211, 240);
             // 
             // botsToolStripMenuItem
             // 
             botsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             botsToolStripMenuItem.Name = "botsToolStripMenuItem";
-            botsToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            botsToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             botsToolStripMenuItem.Text = "Bots";
             // 
             // languageToolStripMenuItem
             // 
             languageToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            languageToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            languageToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             languageToolStripMenuItem.Text = "Language";
             // 
             // themeToolStripMenuItem
@@ -405,7 +407,7 @@ namespace RSBot.Views
             themeToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { darkToolStripMenuItem, lightToolStripMenuItem, autoToolStripMenuItem, coloredToolStripMenuItem });
             themeToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
             themeToolStripMenuItem.Name = "themeToolStripMenuItem";
-            themeToolStripMenuItem.Size = new System.Drawing.Size(148, 26);
+            themeToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
             themeToolStripMenuItem.Text = "Theme";
             // 
             // darkToolStripMenuItem
@@ -461,6 +463,14 @@ namespace RSBot.Views
             windowPageControl.SelectedIndex = -1;
             windowPageControl.Size = new System.Drawing.Size(943, 609);
             windowPageControl.TabIndex = 13;
+            // 
+            // pyPluginsToolStripMenuItem
+            // 
+            pyPluginsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(0, 0, 0);
+            pyPluginsToolStripMenuItem.Name = "pyPluginsToolStripMenuItem";
+            pyPluginsToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            pyPluginsToolStripMenuItem.Text = "PyPlugins";
+            pyPluginsToolStripMenuItem.Click += pyPluginsToolStripMenuItem_Click;
             // 
             // Main
             // 
@@ -536,6 +546,7 @@ namespace RSBot.Views
         private SDUI.Controls.WindowPageControl windowPageControl;
         private Entity entity1;
         private SDUI.Controls.Panel pSidebarCustom;
+        private ToolStripMenuItem pyPluginsToolStripMenuItem;
     }
 }
 
