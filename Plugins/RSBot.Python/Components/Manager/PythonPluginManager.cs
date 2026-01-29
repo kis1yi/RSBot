@@ -1,5 +1,4 @@
-﻿using PeNet.Header.Resource;
-using Python.Runtime;
+﻿using Python.Runtime;
 using RSBot.Python.Components.API.Handler;
 using RSBot.Python.Components.API.ModuleLoader;
 using System;
