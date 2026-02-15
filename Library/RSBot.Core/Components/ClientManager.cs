@@ -82,6 +82,13 @@ public class ClientManager
             creationFlags = CREATE_SUSPENDED;
         }
 
+        if (Game.ClientType == GameClientType.RuSro)
+        {
+            string login = GlobalConfig.Get<string>("RSBot.RuSro.login");
+            string password = GlobalConfig.Get<string>("RSBot.RuSro.password");
+            args = $"-LOGIN:{login} -PASSWORD:{password}";
+        }
+
         // ================================
         // CREATE PROCESS
         // ================================
@@ -118,13 +125,6 @@ public class ClientManager
             catch (IOException)
             {
                 Log.Debug("DLL is using, can't replace");
-            }
-
-            if (Game.ClientType == GameClientType.RuSro)
-            {
-                string login = GlobalConfig.Get<string>("RSBot.RuSro.login");
-                string password = GlobalConfig.Get<string>("RSBot.RuSro.password");
-                args = $"-LOGIN:{login} -PASSWORD:{password}";
             }
 
             Process sroProcess = Process.GetProcessById((int)pi.dwProcessId);
