@@ -50,7 +50,6 @@ public class ClientManager
         string libraryDllName = "Client.Library.dll";
         string fullPath = Path.Combine(Kernel.BasePath, libraryDllName);
 
-        // UTF-16 + null terminator
         byte[] buffer = Encoding.Unicode.GetBytes(fullPath + "\0");
         uint pathLen = (uint)buffer.Length;
 
@@ -89,9 +88,6 @@ public class ClientManager
             args = $"-LOGIN:{login} -PASSWORD:{password}";
         }
 
-        // ================================
-        // CREATE PROCESS
-        // ================================
         if (!CreateProcess(
             null,
             $"\"{path}\" {args}",
@@ -106,12 +102,8 @@ public class ClientManager
         ))
             return false;
 
-        // create temp config once
         PrepareTempConfigFile(pi.dwProcessId, divisionIndex);
 
-        // ================================
-        // SPECIAL CLIENTS (d3d9.dll)
-        // ================================
         if (specialClient)
         {
             try
@@ -135,11 +127,10 @@ public class ClientManager
                 ResumeThread(pi.hThread);
             }
 
+            BypassLauncherCheck(sroProcess, pi);
+
             _process = sroProcess;
         }
-        // ================================
-        // NORMAL CLIENTS (INJECT)
-        // ================================
         else
         {
             var handle = OpenProcess(PROCESS_ALL_ACCESS, false, pi.dwProcessId);
@@ -196,9 +187,6 @@ public class ClientManager
                 return false;
         }
 
-        // ================================
-        // FINALIZE
-        // ================================
         _process.EnableRaisingEvents = true;
         _process.Exited += ClientProcess_Exited;
 
@@ -206,8 +194,38 @@ public class ClientManager
         return true;
     }
 
+    /// <summary>
+    /// Modifies the memory of a running process to bypass launcher security checks.
+    /// </summary>
+    /// <param name="process">The process whose memory will be patched. Must be a valid, running process and cannot be null.</param>
+    /// <param name="pi">A PROCESS_INFORMATION structure containing information about the target process. Must correspond to the
+    /// specified process and be valid.</param>
+    public static void BypassLauncherCheck(Process process, PROCESS_INFORMATION pi)
+    {
+        var moduleMemory = new byte[process.MainModule.ModuleMemorySize];
+        ReadProcessMemory(
+            process.Handle,
+            process.MainModule.BaseAddress,
+            moduleMemory,
+            process.MainModule.ModuleMemorySize,
+            out _
+        );
 
+        var patchNop = new byte[] { 0x90, 0x90 };
+        var patchNop2 = new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90 };
+        var patchJmp = new byte[] { 0xEB };
 
+        string signature = "55 8B EC 83 EC ?? 8B 45 ?? 50 E8 ?? ?? ?? ?? 83 C4 04 89 45 ?? 8B 4D ?? 89 4D ?? 68 ?? ?? ?? ?? 6A 00 6A 00";
+
+        int baseAddress = process.MainModule.BaseAddress.ToInt32();
+        var address = FindPattern(signature, moduleMemory, baseAddress);
+
+        byte[] patch = { 0xB0, 0x01, 0xC3 };
+
+        VirtualProtectEx(pi.hProcess, address, (UIntPtr)patch.Length, 0x40, out uint oldProtect);
+        WriteProcessMemory(pi.hProcess, address, patch, (uint)patch.Length, out _);
+        VirtualProtectEx(pi.hProcess, address, (UIntPtr)patch.Length, oldProtect, out oldProtect);
+    }
 
     /// <summary>
     /// Applies an in-memory patch to the XIGNCODE module of the specified process.
@@ -326,8 +344,8 @@ public class ClientManager
     }
 
     /// <summary>
-    ///     Searches the specified buffer for the first occurrence of a byte pattern defined by a hexadecimal string and
-    ///     returns the corresponding memory address.
+    ///     Searches the specified buffer for the first occurrence of a byte pattern defined by a hexadecimal string
+    ///     or masks ?? and ? and returns the corresponding memory address.
     /// </summary>
     /// <param name="stringPattern"></param>
     /// <param name="buffer"></param>
@@ -335,17 +353,24 @@ public class ClientManager
     /// <returns></returns>
     private static IntPtr FindPattern(string stringPattern, byte[] buffer, int baseAddress)
     {
-        var pattern = stringPattern.Split(' ').Select(p => byte.Parse(p, NumberStyles.AllowHexSpecifier)).ToArray();
+        var pattern = stringPattern.Split(' ')
+            .Select(p => p == "??" || p == "?" ? -1 : int.Parse(p, NumberStyles.AllowHexSpecifier))
+            .ToArray();
 
-        for (uint i = 0; i < buffer.Length - pattern.Length; i++)
+        int bufferLength = buffer.Length;
+        int patternLength = pattern.Length;
+
+        for (int i = 0; i <= bufferLength - patternLength; i++)
         {
-            var found = true;
-            for (uint j = 0; j < pattern.Length; j++)
-                if (buffer[i + j] != pattern[j])
+            bool found = true;
+            for (int j = 0; j < patternLength; j++)
+            {
+                if (pattern[j] != -1 && buffer[i + j] != (byte)pattern[j])
                 {
                     found = false;
                     break;
                 }
+            }
 
             if (found)
                 return (IntPtr)(baseAddress + i);
