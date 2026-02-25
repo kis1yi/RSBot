@@ -70,17 +70,6 @@ public class ClientManager
             Game.ClientType == GameClientType.Taiwan ||
             Game.ClientType == GameClientType.Japanese;
 
-        uint creationFlags = 0;
-
-        if (
-            Game.ClientType == GameClientType.VTC_Game ||
-            Game.ClientType == GameClientType.Turkey ||
-            Game.ClientType == GameClientType.Taiwan
-        )
-        {
-            creationFlags = CREATE_SUSPENDED;
-        }
-
         if (Game.ClientType == GameClientType.RuSro)
         {
             string login = GlobalConfig.Get<string>("RSBot.RuSro.login");
@@ -94,7 +83,7 @@ public class ClientManager
             IntPtr.Zero,
             IntPtr.Zero,
             false,
-            specialClient ? creationFlags : CREATE_SUSPENDED,
+            CREATE_SUSPENDED,
             IntPtr.Zero,
             silkroadDirectory,
             ref si,
@@ -121,13 +110,22 @@ public class ClientManager
 
             Process sroProcess = Process.GetProcessById((int)pi.dwProcessId);
 
-            if (creationFlags == CREATE_SUSPENDED)
+            ResumeThread(pi.hThread);
+            Thread.Sleep(150);
+            SuspendThread(pi.hThread);
+
+            if (
+                Game.ClientType == GameClientType.VTC_Game ||
+                Game.ClientType == GameClientType.Turkey ||
+                Game.ClientType == GameClientType.Taiwan
+            )
             {
                 ApplyXigncodePatch(sroProcess, pi);
-                ResumeThread(pi.hThread);
             }
 
             BypassLauncherCheck(sroProcess, pi);
+
+            ResumeThread(pi.hThread);
 
             _process = sroProcess;
         }
@@ -234,10 +232,6 @@ public class ClientManager
     /// <param name="pi">The process information structure containing handles and thread information for the target process.</param>
     private static void ApplyXigncodePatch(Process process, PROCESS_INFORMATION pi)
     {
-        ResumeThread(pi.hThread);
-        Thread.Sleep(150);
-        SuspendThread(pi.hThread);
-
         var moduleMemory = new byte[process.MainModule.ModuleMemorySize];
         ReadProcessMemory(
             process.Handle,
