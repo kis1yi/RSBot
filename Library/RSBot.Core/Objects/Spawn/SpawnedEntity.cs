@@ -36,6 +36,11 @@ public class SpawnedEntity
     public uint Id { get; set; }
 
     /// <summary>
+    ///     Gets or sets the name of the guild.
+    /// </summary>
+    public string GuildName { get; set; }
+
+    /// <summary>
     ///     Gets or sets the state.
     /// </summary>
     /// <value>

@@ -214,6 +214,7 @@ namespace RSBot.Python.Components.API.Core.Entity
                 }
                 result.SetItem(new PyString("name"), new PyString(Game.Player.Name));
                 result.SetItem(new PyString("server"), new PyString(Serverlist.Joining.Name));
+                result.SetItem(new PyString("guild"), new PyString(Game.Player.GuildName ?? ""));
                 result.SetItem(new PyString("uid"), new PyInt(Game.Player.UniqueId));
                 result.SetItem(new PyString("model"), new PyInt(Game.Player.Id));
                 result.SetItem(new PyString("x"), new PyFloat(Game.Player.Position.X));

@@ -34,6 +34,9 @@ internal class Chat
         if (type == ChatType.Private)
             chatPacket.WriteString(reciever);
 
+        if (type == ChatType.Union)
+            message = $"-{Game.Player.GuildName}): " + message;
+
         chatPacket.WriteConditonalString(message);
 
         PacketManager.SendPacket(chatPacket, PacketDestination.Server);
