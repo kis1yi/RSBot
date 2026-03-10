@@ -43,6 +43,8 @@ internal partial class Main : DoubleBufferedControl
     /// </summary>
     private void SubscribeEvents()
     {
+        ClientlessManager.RegionalAuthHandler = HandleRegionalAuth;
+
         EventManager.SubscribeEvent("OnLoadVersionInfo", new Action<VersionInfo>(OnLoadVersionInfo));
         EventManager.SubscribeEvent("OnAgentServerConnected", OnAgentServerConnected);
         EventManager.SubscribeEvent("OnAgentServerDisconnected", OnAgentServerDisconnected);
@@ -109,6 +111,13 @@ internal partial class Main : DoubleBufferedControl
                 if (reloginSeq != Volatile.Read(ref _reloginSeq))
                     return;
 
+                var userAuthenticated = await HandleRegionalAuth();
+                if (!userAuthenticated)
+                {
+                    Log.Warn("Regional auth failed!");
+                    return;
+                }
+
                 if (wasClientless)
                 {
                     // Clientless relogin: restart proxy flow only.
@@ -117,10 +126,6 @@ internal partial class Main : DoubleBufferedControl
                 }
                 else
                 {
-                    var userAuthenticated = await HandleRegionalAuth();
-                    if (!userAuthenticated)
-                        Log.Warn("Regional auth failed; starting client anyway for relogin attempt...");
-
                     // Client relogin: restart client process.
                     ClientManager.Kill();
                     await StartClientProcess();
@@ -419,7 +424,10 @@ internal partial class Main : DoubleBufferedControl
 
             var userAuthenticated = await HandleRegionalAuth();
             if (!userAuthenticated)
-                Log.Warn("Regional auth failed; starting client anyway for relogin attempt...");
+            {
+                Log.Warn("Regional auth failed!");
+                return;
+            }
 
             await StartClientProcess();
             return;
@@ -692,13 +700,11 @@ internal partial class Main : DoubleBufferedControl
         }
     }
 
-    private async Task<bool> HandleRegionalAuth()
+    private static async Task<bool> HandleRegionalAuth()
     {
-        var clientType = (GameClientType)comboBoxClientType.SelectedIndex;
-
-        if (clientType == GameClientType.RuSro)
+        if (Game.ClientType == GameClientType.RuSro)
             return await RuSroAuthService.Auth();
-        else if (clientType == GameClientType.Japanese)
+        else if (Game.ClientType == GameClientType.Japanese)
             return await JSROAuthService.GetTokenAsync();
         return true;
     }

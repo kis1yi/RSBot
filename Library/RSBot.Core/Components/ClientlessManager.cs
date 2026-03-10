@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using RSBot.Core.Event;
 using RSBot.Core.Network;
 
@@ -6,6 +7,23 @@ namespace RSBot.Core.Components;
 
 public class ClientlessManager
 {
+    /// <summary>
+    ///     Optional regional authentication handler provided by the host plugin.
+    ///     Returns <c>true</c> if authentication succeeded (or is not required).
+    /// </summary>
+    public static Func<Task<bool>>? RegionalAuthHandler { get; set; }
+
+    /// <summary>
+    ///     Runs the regional auth flow if a handler is registered.
+    /// </summary>
+    public static async Task<bool> HandleRegionalAuth()
+    {
+        if (RegionalAuthHandler != null)
+            return await RegionalAuthHandler();
+
+        return true;
+    }
+
     /// <summary>
     ///     Subscribes the events.
     /// </summary>
@@ -53,6 +71,13 @@ public class ClientlessManager
 
         Log.Warn($"Attempting relogin in {delay / 1000} seconds...");
         await Task.Delay(delay);
+
+        var userAuthenticated = await HandleRegionalAuth();
+        if (!userAuthenticated)
+        {
+            Log.Warn("Regional auth failed!");
+            return;
+        }
 
         Game.Start();
     }

@@ -306,6 +306,8 @@ public class Proxy
     {
         if (IsConnectedToAgentserver || _connectionTarget == ConnectionTarget.Agent)
         {
+            _connectionTarget = ConnectionTarget.None;
+
             // Only log if we had an established connection or enough time passed (rate limit).
             if (IsConnectedToAgentserver || (DateTime.UtcNow - _lastAgentDisconnectLogUtc).TotalSeconds >= 3)
             {
@@ -323,6 +325,8 @@ public class Proxy
         }
         else if (IsConnectedToGatewayserver || _connectionTarget == ConnectionTarget.Gateway)
         {
+            _connectionTarget = ConnectionTarget.None;
+
             // Capture state before we flip it; allows us to avoid logging disconnects that happen
             // before an actual connection was established.
             var wasConnectedToGateway = IsConnectedToGatewayserver;
