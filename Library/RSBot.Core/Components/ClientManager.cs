@@ -99,7 +99,7 @@ public class ClientManager
             {
                 File.Copy(
                     Path.Combine(Kernel.BasePath, libraryDllName),
-                    Path.Combine(silkroadDirectory, "d3d9.dll"),
+                    Path.Combine(silkroadDirectory, "dsound.dll"),
                     true
                 );
             }

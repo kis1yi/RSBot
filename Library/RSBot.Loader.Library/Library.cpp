@@ -11,7 +11,7 @@
 
 #pragma comment(lib, "IPHLPAPI.lib")
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(linker, "/export:Direct3DCreate9=C:\\Windows\\System32\\d3d9.Direct3DCreate9")
+#pragma comment(linker, "/export:DirectSoundCreate=C:\\Windows\\System32\\dsound.DirectSoundCreate,@11")
 
 using namespace std;
 
