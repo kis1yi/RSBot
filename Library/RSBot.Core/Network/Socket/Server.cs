@@ -87,17 +87,12 @@ public class Server : NetBase
 
             EnablePacketDispatcher = true;
 
-            // Fire OnConnected BEFORE starting async receive to avoid a race where the IOCP
-            // callback (OnBeginReceiveCallback) can fire with 0 bytes on the thread-pool
-            // before OnConnected() runs on the calling thread. Without this ordering,
-            // Server_OnDisconnected clears _connectionTarget and Server_OnConnected then
-            // sees ConnectionTarget.None and does nothing, leaving the proxy in a broken state.
+            _socket?.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, OnBeginReceiveCallback, null);
+
             OnConnected();
 
             EventManager.FireEvent("OnServerConnected");
             Log.Debug("Server connection established!");
-
-            _socket?.BeginReceive(_buffer, 0, _buffer.Length, SocketFlags.None, OnBeginReceiveCallback, null);
         }
         catch { }
     }
