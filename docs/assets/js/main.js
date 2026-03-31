@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Footer
   footer.innerHTML = `
         <div class="container-fluid">
-            <p>&copy; 2025 RSBot. All rights reserved.</p>
+            <p>RSBot Copyright &copy; 2026 Silkroad Developer Community. All rights reserved.</p>
         </div>
     `;
 
