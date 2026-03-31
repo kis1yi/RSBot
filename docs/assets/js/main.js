@@ -44,8 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             Community
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="communityDropdown">
-                            <li><a class="dropdown-item" href="https://discord.gg/MuY5ejEU3r" target="_blank">Discord</a></li>
-                            <li><a class="dropdown-item" href="https://github.com/SDClowen/RSBot" target="_blank">GitHub</a></li>
+                            <li><a class="dropdown-item" href="https://discord.gg/FEmNcz7QwP" target="_blank">Discord</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot" target="_blank">GitHub</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             Releases
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="releasesDropdown">
-                            <li><a class="dropdown-item" href="https://github.com/SDClowen/RSBot/releases/latest" target="_blank">Latest Stable</a></li>
-                            <li><a class="dropdown-item" href="https://github.com/SDClowen/RSBot/releases" target="_blank">Nightly</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot/releases/latest" target="_blank">Latest Stable</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot/releases" target="_blank">Nightly</a></li>
                             <li><a class="dropdown-item" href="https://github.com/warofmine/Rsbot-Manager/releases/latest" target="_blank">Manager</a></li>
                         </ul>
                     </li>
@@ -63,13 +63,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             Project
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="projectDropdown">
-                            <li><a class="dropdown-item" href="https://github.com/SDClowen/RSBot" target="_blank">GitHub Repo</a></li>
-                            <li><a class="dropdown-item" href="https://github.com/SDClowen/RSBot/blob/master/LICENSE" target="_blank">License</a></li>
-                            <li><a class="dropdown-item" href="https://app.fossa.com/projects/git%2Bgithub.com%2FSDClowen%2FRSBot?ref=badge_shield" target="_blank">FOSSA</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot" target="_blank">GitHub Repo</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot/blob/master/LICENSE" target="_blank">License</a></li>
                         </ul>
-                    </li>
-                     <li class="nav-item">
-                        <a class="nav-link" href="https://buymeacoffee.com/sdclowen" target="_blank">Donate</a>
                     </li>
                 </ul>
             </div>

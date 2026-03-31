@@ -41,7 +41,7 @@ jobs:
         if: steps.check_commits.outputs.has_new_commits == 'true'
         shell: pwsh
         run: |
-          $gitLog = git log "${{ steps.check_commits.outputs.latest_tag_sha }}..HEAD" --pretty="format:- [%s](https://github.com/SDClowen/RSBot/commit/%H) - @%an"
+          $gitLog = git log "${{ steps.check_commits.outputs.latest_tag_sha }}..HEAD" --pretty="format:- [%s](https://github.com/Silkroad-Developer-Community/RSBot/commit/%H) - @%an"
           Set-Content -Path "commit_log.md" -Value $gitLog -Encoding UTF8
           $currentLog = Get-Content -Path commit_log.md -Raw
           $logWithHeader = "## What's Changed`n" + $currentLog

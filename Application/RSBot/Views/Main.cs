@@ -61,13 +61,10 @@ public partial class Main : UIWindow
 
     #region Methods
 
+    // TODO
     private void donateButton_Click(object sender, EventArgs e)
     {
-        Process.Start(new ProcessStartInfo { FileName = "https://buymeacoffee.com/sdclowen", UseShellExecute = true });
-        Process.Start(
-            new ProcessStartInfo { FileName = "https://github.com/sponsors/SDClowen", UseShellExecute = true }
-        );
-        Process.Start(new ProcessStartInfo { FileName = "https://www.patreon.com/sdclowen", UseShellExecute = true });
+        Process.Start(new ProcessStartInfo { FileName = "https://github.com/Silkroad-Developer-Community/RSBot", UseShellExecute = true });
     }
 
     /// <summary>
