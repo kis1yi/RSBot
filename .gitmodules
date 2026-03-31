@@ -1,4 +1,4 @@
 [submodule "SDUI"]
 	path = SDUI
-	url = https://github.com/kis1yi/SDUI.git
-	branch = stable
+	url = https://github.com/Silkroad-Developer-Community/SDUI.git
+	branch = main
