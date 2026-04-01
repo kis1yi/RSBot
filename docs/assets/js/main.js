@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <ul class="dropdown-menu" aria-labelledby="releasesDropdown">
                             <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot/releases/latest" target="_blank">Latest Stable</a></li>
                             <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/RSBot/releases" target="_blank">Nightly</a></li>
-                            <li><a class="dropdown-item" href="https://github.com/warofmine/Rsbot-Manager/releases/latest" target="_blank">Manager</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/Silkroad-Developer-Community/Rsbot-Manager/releases/latest" target="_blank">Manager</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

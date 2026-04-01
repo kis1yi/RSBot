@@ -14,7 +14,7 @@ To join the conversation, get recent updates/announcements, join our [Discord se
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
 | [![release-latest](https://img.shields.io/github/v/release/Silkroad-Developer-Community/RSBot?label=Latest%20Stable&style=for-the-badge)](https://github.com/Silkroad-Developer-Community/RSBot/releases/latest) | Latest stable release                      |
 | [![release-all](https://img.shields.io/badge/Latest%20Release-Nightly-FF0000?style=for-the-badge)](https://github.com/Silkroad-Developer-Community/RSBot/releases)                                               | Nightly releases for most recent features  |
-| [![release-manager](https://img.shields.io/badge/Latest%20Release-Manager-00DD00?style=for-the-badge)](https://github.com/warofmine/Rsbot-Manager/releases/latest)                                               | Manager for multiple bot profiles          |
+| [![release-manager](https://img.shields.io/badge/Latest%20Release-Manager-00DD00?style=for-the-badge)](https://github.com/Silkroad-Developer-Community/Rsbot-Manager/releases/latest)                            | Manager for multiple bot profiles          |
 | [![docs](https://img.shields.io/badge/RSBot-Docs-FF00FF?style=for-the-badge)](https://Silkroad-Developer-Community.github.io/RSBot)                                                                              | Documentation, tips & tricks and tutorials |
 
 ## Building the project
