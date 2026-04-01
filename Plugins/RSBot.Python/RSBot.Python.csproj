@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
@@ -35,23 +35,15 @@
 
 	<Target Name="DownloadPythonRuntime" BeforeTargets="Build">
 		<PropertyGroup>
-			<PythonZipUrl>https://www.python.org/ftp/python/$(PythonVersion)/python-$(PythonVersion)-embed-win32.zip</PythonZipUrl>
-			<PythonExePath>$(PythonRuntimeDir)python.exe</PythonExePath>
+			<!-- Path to the python runtime directory (trimmed to avoid shell escaping issues) -->
+			<PythonRuntimeDirFull>$([System.IO.Path]::GetFullPath('$(PythonRuntimeDir)').TrimEnd('\'))</PythonRuntimeDirFull>
 		</PropertyGroup>
 
-		<Message Importance="high" Text="[Python-Build] Checking for PythonRuntime at: $(PythonRuntimeDir)" />
+		<Message Importance="high" Text="[Python-Build] Looking for PythonRuntime at: $(PythonRuntimeDirFull)" />
 
-		<MakeDir Directories="$(PythonRuntimeDir)" Condition="!Exists('$(PythonExePath)')" />
+		<Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\scripts\download_python.ps1&quot; -PythonVersion &quot;$(PythonVersion)&quot; -DestinationPath &quot;$(PythonRuntimeDirFull)&quot;" />
 
-		<Exec Command="powershell -Command &quot;Invoke-WebRequest -Uri '$(PythonZipUrl)' -OutFile '$(PythonRuntimeDir)python_temp.zip'&quot;" Condition="!Exists('$(PythonExePath)')" />
-
-		<Exec Command="powershell -Command &quot;Expand-Archive -Path '$(PythonRuntimeDir)python_temp.zip' -DestinationPath '$(PythonRuntimeDir)' -Force&quot;" Condition="!Exists('$(PythonExePath)')" />
-
-		<Delete Files="$(PythonRuntimeDir)python_temp.zip" Condition="Exists('$(PythonRuntimeDir)python_temp.zip')" />
-
-		<Exec Command="powershell -Command &quot;$pth = Get-ChildItem '$(PythonRuntimeDir)*._pth'; if($pth) { (Get-Content $pth) -replace '#import site', 'import site' | Set-Content $pth }&quot;" Condition="Exists('$(PythonExePath)')" />
-
-		<Message Importance="high" Text="[Python-Build] Python Check/Installation finished succesfully." />
+		<Message Importance="high" Text="[Python-Build] Python Check/Installation process finished." />
 	</Target>
 
 </Project>
