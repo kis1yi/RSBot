@@ -57,6 +57,12 @@ jobs:
             python scripts/versioner.py --nightly "${{ env.date }}"
           }
 
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        if: github.event.inputs.version != ''
+        with:
+          commit_message: "Version ${{ github.event.inputs.version }}"
+          file_pattern: "Application/RSBot/RSBot.csproj scripts/RSBot.iss"
+
       - name: Create changelog
         if: steps.check_commits.outputs.has_new_commits == 'true'
         shell: pwsh
@@ -98,8 +104,8 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          name: RSBot Nightly ${{ env.date }}
-          tag_name: ${{ env.date }}
+          tag_name: ${{ github.event.inputs.version || env.date }}
+          name: ${{ github.event.inputs.version != '' && format('RSBot {0}', github.event.inputs.version) || format('RSBot Nightly {0}', env.date) }}
           body_path: commit_log.md
           prerelease: true
           files: |

@@ -34,17 +34,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+; TODO: move python files to config
 [Files]
 ; Main application and standard data (ignores version to always overwrite core files)
 Source: "..\Build\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "..\Build\User\*, ..\Build\Data\Python\Plugins\*"
-
-; Persistent User Configuration (only installs if it doesn't exist, never uninstalls)
-Source: "..\Build\User\*"; DestDir: "{app}\User"; Flags: recursesubdirs createallsubdirs onlyifdoesntexist uninsneveruninstall
-
-; Persistent Python Plugins (only installs if it doesn't exist, never uninstalls)
-; NOTE: Need to change this behavior to overwrite when Python version is bumped.
-; Plugins\RSBot.Python\RSBot.Python.csproj & scripts\download_python.ps1
-Source: "..\Build\Data\Python\Plugins\*"; DestDir: "{app}\Data\Python\Plugins"; Flags: recursesubdirs createallsubdirs onlyifdoesntexist uninsneveruninstall
 
 [Icons]
 Name: "{group}\{#AppName}"; Filename: "{app}\{#AppExeName}"
