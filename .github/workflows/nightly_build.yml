@@ -2,6 +2,10 @@ name: Nightly
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g., x.x.x) leave empty for nightlies"
+        required: false
   schedule:
     - cron: "0 0 */3 * *"
 
@@ -26,10 +30,10 @@ jobs:
           $latestTagCommitSha = git rev-list --tags --max-count=1
           $latestCommitSha = git rev-parse HEAD
           echo "latest_tag=$latest_tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
-          
+
           # Only proceed if changes occurred in these core directories since the last tag
           $relevantChanges = @(git log "$latestTagCommitSha..HEAD" --oneline -- Application Botbases Dependencies Library Plugins SDUI)
-          if ($relevantChanges.Count -gt 0) {
+          if ($relevantChanges.Count -gt 0 -or "${{ github.event_name }}" -eq "workflow_dispatch") {
             echo "has_new_commits=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
             echo "latest_tag_sha=$latestTagCommitSha" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
           }
@@ -41,6 +45,17 @@ jobs:
         if: steps.check_commits.outputs.has_new_commits == 'true'
         shell: pwsh
         run: echo "date=$(Get-Date -Format 'yyyy-MM-dd')" | Out-File -FilePath $Env:GITHUB_ENV -Append
+
+      - name: Setup Version
+        if: steps.check_commits.outputs.has_new_commits == 'true'
+        id: versioning
+        shell: pwsh
+        run: |
+          if ("${{ github.event.inputs.version }}" -ne "") {
+            python scripts/versioner.py --version "${{ github.event.inputs.version }}"
+          } else {
+            python scripts/versioner.py --nightly "${{ env.date }}"
+          }
 
       - name: Create changelog
         if: steps.check_commits.outputs.has_new_commits == 'true'
@@ -63,13 +78,20 @@ jobs:
         if: steps.check_commits.outputs.has_new_commits == 'true'
         run: dotnet restore RSBot.sln
 
-      - name: Create the app package
+      - name: Build and Bundle
         if: steps.check_commits.outputs.has_new_commits == 'true'
+        shell: pwsh
         run: |
           msbuild /p:Configuration=Release /p:Platform=x86
           cd Build
-          Compress-Archive -Path ".\*" -DestinationPath ".\..\RSBot.${{ env.date }}.zip"
+          7z a -tzip -mm=lzma -mx=9 "../RSBot-Portable-${{ steps.versioning.outputs.version }}.zip" ./*
           cd ..
+
+      - name: Build Installer (Inno Setup)
+        if: steps.check_commits.outputs.has_new_commits == 'true'
+        shell: pwsh
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" scripts/RSBot.iss
 
       - name: Create release
         if: steps.check_commits.outputs.has_new_commits == 'true'
@@ -80,6 +102,8 @@ jobs:
           tag_name: ${{ env.date }}
           body_path: commit_log.md
           prerelease: true
-          files: RSBot.${{ env.date }}.zip
+          files: |
+            RSBot-Portable-${{ steps.versioning.outputs.version }}.zip
+            RSBot-Setup-${{ steps.versioning.outputs.version }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
