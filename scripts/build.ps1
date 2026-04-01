@@ -1,5 +1,5 @@
 # Usage:
-# `build.ps1
+# `scripts\build.ps1
 # -Clean[False, optional]
 # -DoNotStart[False, optional]
 # -Configuration[Debug, optional]`

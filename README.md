@@ -32,7 +32,7 @@ To join the conversation, get recent updates/announcements, join our [Discord se
 Run the commands below (You still need MSBuild tooling via Visual Studio):
 
 - `dotnet restore`
-- `powershell -ExecutionPolicy Bypass .\build.ps1`
+- `powershell -ExecutionPolicy Bypass .\scripts\build.ps1`
 
 ## Supported clients
 

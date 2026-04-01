@@ -11,8 +11,8 @@ The project is built using `MSBuild`.
 - Release flags: `/p:Configuration=Release /p:Platform=x86`
 - Solution to build: `.\RSBot.sln`
 
-- Use `.\build.ps1` to take builds.
-- For execution policy issues use with `powershell.exe -ExecutionPolicy Bypass .\build.ps1`
+- Use `.\scripts\build.ps1` to take builds.
+- For execution policy issues use with `powershell.exe -ExecutionPolicy Bypass .\scripts\build.ps1`
 
 - There are arguments that can be passed to the build script, `-Clean` for a clean build, `-Configuration` for the intended build configuration and `-DoNotStart` for not starting the main application.
 - If you fail to make a build ask the user to build it. Check the `.\build.log` for any errors after user confirms the build.
