@@ -6,6 +6,11 @@ on:
       version:
         description: "Version to release (e.g., x.x.x) leave empty for nightlies"
         required: false
+      prerelease:
+        description: "Is this a prerelease?"
+        required: true
+        type: boolean
+        default: true
   schedule:
     - cron: "0 0 */3 * *"
 
@@ -107,7 +112,7 @@ jobs:
           tag_name: ${{ github.event.inputs.version || env.date }}
           name: ${{ github.event.inputs.version != '' && format('RSBot {0}', github.event.inputs.version) || format('RSBot Nightly {0}', env.date) }}
           body_path: commit_log.md
-          prerelease: true
+          prerelease: ${{ github.event.inputs.prerelease != 'false' }}
           files: |
             RSBot-Portable-${{ steps.versioning.outputs.version }}.zip
             RSBot-Setup-${{ steps.versioning.outputs.version }}.exe
