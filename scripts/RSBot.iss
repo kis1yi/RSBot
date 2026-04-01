@@ -1,6 +1,6 @@
 [Setup]
 #define AppName "RSBot"
-#define AppVersion "2.9.9"
+#define AppVersion "2.10.0"
 #define AppPublisher "Silkroad Developer Community"
 #define AppURL "https://github.com/Silkroad-Developer-Community/RSBot"
 #define AppExeName "RSBot.exe"

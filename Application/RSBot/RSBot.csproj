@@ -12,8 +12,8 @@
     <RepositoryUrl>https://github.com/Silkroad-Developer-Community/RSBot</RepositoryUrl>
     <OutputType>WinExe</OutputType>
     <ApplicationIcon>app.ico</ApplicationIcon>
-    <InformationalVersion>2.9.9</InformationalVersion>
-    <AssemblyVersion>2.9.9</AssemblyVersion>
+    <InformationalVersion>2.10.0</InformationalVersion>
+    <AssemblyVersion>2.10.0</AssemblyVersion>
     <PlatformTarget>x86</PlatformTarget>
     <UseWPF>False</UseWPF>
   </PropertyGroup>
