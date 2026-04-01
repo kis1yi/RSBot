@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using RSBot.Core.Components;
 using RSBot.Core.Event;
@@ -114,8 +114,10 @@ public class Log
         Warn(obj.Message);
 
         var filePath = Path.Combine(Kernel.BasePath, "Data", "Logs", "Exceptions", $"{DateTime.Now:dd-MM-yyyy}.txt");
-        if (!Directory.Exists(filePath))
-            Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+        var directory = Path.GetDirectoryName(filePath);
+
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
 
         using (var stream = File.AppendText(filePath))
         {

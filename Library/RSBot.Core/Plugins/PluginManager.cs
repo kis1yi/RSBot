@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -61,7 +61,7 @@ public class PluginManager
         catch (Exception ex)
         {
             File.WriteAllText(
-                Kernel.BasePath + "\\boot-error.log",
+                Path.Combine(Kernel.BasePath, "Data", "Logs", "boot-error.log"),
                 $"The plugin manager encountered a problem: \n{ex.Message} at {ex.StackTrace}"
             );
             return false;

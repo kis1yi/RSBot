@@ -370,3 +370,4 @@ FodyWeavers.xsd
 !RSBot.Log
 
 temp
+**/**.exe
